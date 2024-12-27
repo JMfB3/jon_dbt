@@ -1,0 +1,10 @@
+sources:
+  - name: raw_robinhood 
+    database: "{{ env_var('DBT_DB') }}"  
+    schema: raw_robinhood   
+    tables:
+      - name: dividends 
+      - name: stock_orders 
+      - name: bnk_txfrs 
+      - name: crypto_orders
+      - name: latest_prices 
