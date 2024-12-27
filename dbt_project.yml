@@ -40,3 +40,13 @@ models:
     # Applies to all files under models/example/
     example:
       +materialized: table
+    
+    aa_gold:
+      robinhood:
+        +schema: robinhood_dw 
+    ab_silver:
+      staging:
+        robinhood:
+          +schema: staging_robinhood 
+          +tags:
+            - staging_robinhood 
