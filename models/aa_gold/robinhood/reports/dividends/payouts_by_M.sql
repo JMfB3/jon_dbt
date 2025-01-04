@@ -14,6 +14,8 @@ with
         from dividends
         where 
             paid_at >= '2023-01-01'
+            and 
+            status not in ('voided', 'pending')
         group by 1
     )
 

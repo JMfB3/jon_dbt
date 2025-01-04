@@ -14,7 +14,11 @@ with
                 date_part('quarter', coalesce(paid_at, payable_date)) qqq,
             sum(amount) as divs,
             to_char(sum(amount), '$999,999,999,990.00') as fmt_divs, 
-        from dividends
+        from dividends 
+        where 
+            paid_at >= '2023-01-01'
+            and 
+            status not in ('voided', 'pending')
         group by 1
         order by 1 desc 
     ),
