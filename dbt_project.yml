@@ -45,9 +45,9 @@ models:
       robinhood:
         +schema: robinhood_find_a_home
         dw:
-          +schema: robinhood_dw 
+          +schema: dw_robinhood 
         reports:
-          +schema: rh_rpts
+          +schema: rpts_robinhood
     ab_silver:
       staging:
         robinhood:
