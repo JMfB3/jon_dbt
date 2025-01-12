@@ -5,31 +5,34 @@
 ) }}
 
 with 
-    dividends as (select * from {{ ref('dividends') }}),
-
-    base as (
-        select *
+    dividends as (select * from {{ ref('dividends') }}), 
+    
+    tickers as (
+        select  
+            ticker,
+            to_char(sum(dividends.amount), '$999,999,999,990.00') as week_payout,
         from dividends 
         where 
-            coalesce(paid_at, '1990-01-01') > date_trunc(year, current_date())
-    ),
-
-    tickers as (
-        select distinct 
-            ticker as ticker,
-        from base 
-        where 
-            paid_at > current_date() - 7
+            date_trunc(week, paid_at) = date_trunc(week, current_date() - 2)
+            and 
+            status not in ('voided', 'pending')
+        group by 1
     ),
 
     final as (
         select 
             tickers.ticker,
-            to_char(sum(base.amount), '$999,999,999,990.00') as amount,
-        from base 
-        inner join tickers on base.ticker = tickers.ticker
-        group by 1
+            tickers.week_payout,
+            to_char(sum(dividends.amount), '$999,999,999,990.00') as ytd_payout,
+        from tickers 
+        left join dividends on tickers.ticker = dividends.ticker 
+        where 
+            dividends.paid_at >= date_trunc(year, current_date())
+            and 
+            status not in ('voided', 'pending')
+        group by 1,2
     )
 
 select *
 from final 
+order by 2, 1

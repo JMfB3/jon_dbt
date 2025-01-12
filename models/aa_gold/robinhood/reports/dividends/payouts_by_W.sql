@@ -9,7 +9,7 @@ with
 
     final as (
         select 
-            to_char(date_trunc(month, paid_at), 'YYYY-MM') as mmm,
+            to_char(date_trunc(week, paid_at), 'YYYY-MM') as www,
             to_char(sum(amount), '$999,999,999,990.00') as dividends
         from dividends
         where 
