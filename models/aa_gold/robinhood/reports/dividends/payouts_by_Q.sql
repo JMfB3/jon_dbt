@@ -9,9 +9,9 @@ with
 
     a as (
         select 
-            right(date_part('year', coalesce(paid_at, payable_date)), 2) || 
+            right(date_part('year', paid_at), 2) || 
                 '-Q' || 
-                date_part('quarter', coalesce(paid_at, payable_date)) qqq,
+                date_part('quarter', paid_at) qqq,
             sum(amount) as divs,
             to_char(sum(amount), '$999,999,999,990.00') as fmt_divs, 
         from dividends 
