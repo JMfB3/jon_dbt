@@ -5,7 +5,7 @@
 ) }}
 
 with 
-    dividends as (select * from {{ ref('dividends') }}), 
+    dividends as (select * from {{ ref('dividends') }}),
     
     tickers as (
         select  
@@ -13,7 +13,7 @@ with
             to_char(sum(dividends.amount), '$999,999,999,990.00') as week_payout,
         from dividends 
         where 
-            date_trunc(week, paid_at) = date_trunc(week, current_date() - 2)
+            date_trunc(week, paid_at) = date_trunc(week, current_date() - 6)
             and 
             status not in ('voided', 'pending')
         group by 1
@@ -27,7 +27,7 @@ with
         from tickers 
         left join dividends on tickers.ticker = dividends.ticker 
         where 
-            dividends.paid_at >= date_trunc(year, current_date())
+            coalesce(dividends.paid_at, '9999-12-31') between date_trunc(year, current_date()) and current_date()
             and 
             status not in ('voided', 'pending')
         group by 1,2
